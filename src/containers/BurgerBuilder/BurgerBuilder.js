@@ -32,6 +32,8 @@ class BurgerBuilder extends Component {
 
   componentDidMount () {
     console.log(this.props);
+    this.props.onInitIngredients();
+    // Used Redux for this
     // axios.get( 'https://my-react-burger-ab717.firebaseio.com/ingredients.json' )
     // .then( response => {
     //   this.setState( { ingredients: response.data } );
@@ -118,7 +120,7 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0
     }
     let orderSummary = null;
-    let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+    let burger = this.props.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
     if ( this.props.ing ) {
       burger = (
@@ -156,8 +158,9 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
   return {
-    ing: state.ingredients,
-    price: state.totalPrice
+    ing: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error
   }
 }
 
@@ -165,7 +168,8 @@ const mapDispatchToProps = dispatch => {
   return {
     // redux advance
     onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
-    onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName))
+    onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
+    onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients())
 
     // onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
     // onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})

@@ -28,6 +28,7 @@ class Checkout extends Component {
   //   }
   //   this.setState( { ingredients: ingredients, totalPrice: price } );
   // }
+  
 
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
@@ -39,9 +40,12 @@ class Checkout extends Component {
 
   render () {
     let summary = ( <Redirect to='/'/>)
+
     if ( this.props.ing ) {
+      const purchasedRedirect = this.props.purchased ? <Redirect to='/' /> : null;
       summary = (
       <div>
+        {purchasedRedirect}
         <CheckoutSummary
           ingredients={this.props.ing}
           checkoutCancelled={this.checkoutCancelledHandler}
@@ -58,9 +62,11 @@ class Checkout extends Component {
 
 const mapStateToProps = state => {
   return {
-    ing: state.burgerBuilder.ingredients
+    ing: state.burgerBuilder.ingredients,
+    purchased: state.order.purchased
   }
 }
+
 
 
     export default connect(mapStateToProps)(Checkout);

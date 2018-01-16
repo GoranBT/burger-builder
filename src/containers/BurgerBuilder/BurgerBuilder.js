@@ -27,8 +27,8 @@ class BurgerBuilder extends Component {
     // totalPrice: 4,
     // purchasable: false,
     purchasing: false,
-    loading: false,
-    error: false
+    // loading: false,
+    // error: false
   }
 
   componentDidMount () {
@@ -91,10 +91,10 @@ class BurgerBuilder extends Component {
   // }
 
   purchaseHandler = () => {
-    if(this.props.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       this.setState( { purchasing: true } );
     } else {
-      this.props.onSetAuthRedirectPath('/checkout')
+      this.props.onSetAuthRedirectPath('/checkout');
       this.props.history.push('/auth');
     }
   }
@@ -139,6 +139,7 @@ class BurgerBuilder extends Component {
             disabled={disabledInfo}
             purchasable={this.updatePurchaseState(this.props.ing)}
             ordered={this.purchaseHandler}
+            isAuth={this.props.isAuthenticated}
             price={this.props.price} />
           </Aux>
         );
@@ -163,26 +164,27 @@ class BurgerBuilder extends Component {
       }
     }
 
-const mapStateToProps = state => {
-  return {
-    ing: state.burgerBuilder.ingredients,
-    price: state.burgerBuilder.totalPrice,
-    error: state.burgerBuilder.error
-  }
-}
+    const mapStateToProps = state => {
+      return {
+        ing: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error,
+        isAuthenticated: state.auth.token !== null
+      }
+    }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    // redux advance
-    onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
-    onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
-    onInitIngredients: () => dispatch(actions.initIngredients()),
-    onInitPurcase: () => dispatch(actions.purchaseInit()),
-    onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
-    // onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-    // onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
-  }
-}
+    const mapDispatchToProps = dispatch => {
+      return {
+        // redux advance
+        onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(actions.initIngredients()),
+        onInitPurcase: () => dispatch(actions.purchaseInit()),
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
+        // onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
+        // onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
+      }
+    }
 
 
 
